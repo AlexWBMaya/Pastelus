@@ -155,6 +155,11 @@ public class Visão extends javax.swing.JFrame {
         formattedTextFieldTelefone.setText("+000 (00) 00000-0000");
 
         botaoExcluirContato.setText("Excluir");
+        botaoExcluirContato.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                botaoExcluirContatoActionPerformed(evt);
+            }
+        });
 
         jButton2.setText("Consultar");
 
@@ -352,31 +357,37 @@ public class Visão extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Error: " + ex.getMessage());
         }
     }//GEN-LAST:event_BotaoInserirContatoActionPerformed
-    
-        private void botaoExcluirContatoActionPerformed(ActionEvent evt) {
+
+    private void botaoExcluirContatoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botaoExcluirContatoActionPerformed
+        // TODO add your handling code here:
         int selectedRow = tabelaPrincipal.getSelectedRow();
         if (selectedRow >= 0) {
             String nomeCompleto = (String) tabelaPrincipal.getValueAt(selectedRow, 0);
             FileManager.removerContatoDoArquivo(filePathField.getText(), nomeCompleto);
-            carregarContatosDoArquivo();
+            carregarContatosDoArquivo(); // Refresh the table after removing the contact
         } else {
             JOptionPane.showMessageDialog(this, "No contact selected to delete.");
         }
-    }
+    }//GEN-LAST:event_botaoExcluirContatoActionPerformed
         
     private void carregarContatosDoArquivo() {
-    try {
-        DefaultTableModel model = (DefaultTableModel) tabelaPrincipal.getModel();
-        model.setRowCount(0); // Clear existing data
+        try {
+            DefaultTableModel model = (DefaultTableModel) tabelaPrincipal.getModel();
+            model.setRowCount(0); // Clear existing data
 
-        List<Contato> contatos = FileManager.lerContatosDoArquivo(filePathField.getText());
-        for (Contato contato : contatos) {
-            model.addRow(new Object[]{contato.getNomeCompleto(), contato.getEmail(), contato.getTelefone(), contato.getLogradouro() + " " + contato.getNumeroEndereco()});
-        }
-    } catch (Exception ex) {
+            List<Contato> contatos = FileManager.lerContatosDoArquivo(filePathField.getText());
+            for (Contato contato : contatos) {
+                model.addRow(new Object[]{
+                    contato.getNomeCompleto(),
+                    contato.getEmail(),
+                    contato.getTelefone(),
+                    contato.getEndereco().getLogradouro() + " " + contato.getEndereco().getNumero()
+                });
+            }
+        } catch (Exception ex) {
         JOptionPane.showMessageDialog(this, "Error loading contacts: " + ex.getMessage());
+        }
     }
-}
     
     private void adicionarContatoNaTabela(Contato contato) {
         DefaultTableModel model = (DefaultTableModel) tabelaPrincipal.getModel();
