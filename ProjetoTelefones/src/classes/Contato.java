@@ -22,7 +22,7 @@ public class Contato {
     }
 
     Contato(String nomeCompleto, String telefone, String email, String logradouro, String numero, String complemento, String cep, String cidadeestado) {
-        
+        String contatoString = nomeCompleto + telefone + email + logradouro + numero + complemento + cep + cidadeestado;
     }
 
     public String getNomeCompleto() {
