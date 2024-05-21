@@ -19,10 +19,7 @@ public class Contato {
 
     // Sobrecarga do construtor para tratar strings
     public Contato(String nomeCompleto, String telefone, String email, String logradouro, String numero, String complemento, String cep, String cidadeestado) {
-        this.nomeCompleto = nomeCompleto;
-        this.telefone = telefone;
-        this.email = email;
-        this.endereco = new Endereco(logradouro, Integer.parseInt(numero), complemento, cep, cidadeestado);
+        this(nomeCompleto, telefone, email, logradouro, Integer.parseInt(numero), complemento, cep, cidadeestado);
     }
 
     // Getters e setters
@@ -30,32 +27,52 @@ public class Contato {
         return nomeCompleto;
     }
 
-    public String getTelefone() {
-        return telefone;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public Endereco getEndereco() {
-        return endereco;
-    }
-
     public void setNomeCompleto(String nomeCompleto) {
         this.nomeCompleto = nomeCompleto;
+    }
+
+    public String getTelefone() {
+        return telefone;
     }
 
     public void setTelefone(String telefone) {
         this.telefone = telefone;
     }
 
+    public String getEmail() {
+        return email;
+    }
+
     public void setEmail(String email) {
         this.email = email;
     }
 
+    public Endereco getEndereco() {
+        return endereco;
+    }
+
     public void setEndereco(Endereco endereco) {
         this.endereco = endereco;
+    }
+
+    public String getLogradouro() {
+        return endereco.getLogradouro();
+    }
+
+    public int getNumeroEndereco() {
+        return endereco.getNumero();
+    }
+
+    public String getComplemento() {
+        return endereco.getComplemento();
+    }
+
+    public String getCep() {
+        return endereco.getCep();
+    }
+
+    public String getCidadeEstado() {
+        return endereco.getCidadeestado();
     }
 
     @Override

@@ -288,25 +288,10 @@
         <Component class="javax.swing.JTable" name="tabelaPrincipal">
           <Properties>
             <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
-              <Table columnCount="4" rowCount="4">
-                <Column editable="true" title="Nome Completo" type="java.lang.Object">
-                  <Data value="1231"/>
-                  <Data value="31321"/>
-                  <Data value="31312"/>
-                  <Data value="321321321"/>
-                </Column>
-                <Column editable="true" title="Email" type="java.lang.Object">
-                  <Data value="31321"/>
-                  <Data value="3132132"/>
-                  <Data value="31321321"/>
-                  <Data value="321321321"/>
-                </Column>
-                <Column editable="true" title="Telefone" type="java.lang.Object">
-                  <Data value="321321"/>
-                  <Data value="30231321"/>
-                  <Data value="0,0,100,,0"/>
-                  <Data value="null"/>
-                </Column>
+              <Table columnCount="4" rowCount="0">
+                <Column editable="true" title="Nome Completo" type="java.lang.Object"/>
+                <Column editable="true" title="Email" type="java.lang.Object"/>
+                <Column editable="true" title="Telefone" type="java.lang.Object"/>
                 <Column editable="true" title="Endere&#xe7;o" type="java.lang.Object"/>
               </Table>
             </Property>

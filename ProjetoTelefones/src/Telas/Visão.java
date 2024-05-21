@@ -25,6 +25,7 @@ public class Visão extends javax.swing.JFrame {
     public Visão() {
         initComponents();
         filePathField.setEnabled(false);
+        carregarContatosDoArquivo(); // Carregar contatos ao iniciar
     }
     
     /**
@@ -134,10 +135,7 @@ public class Visão extends javax.swing.JFrame {
 
         tabelaPrincipal.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {"1231", "31321", "321321", null},
-                {"31321", "3132132", "30231321", null},
-                {"31312", "31321321", "0,0,100,,0", null},
-                {"321321321", "321321321", null, null}
+
             },
             new String [] {
                 "Nome Completo", "Email", "Telefone", "Endereço"
@@ -310,15 +308,11 @@ public class Visão extends javax.swing.JFrame {
 
     private void FileChooserActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_FileChooserActionPerformed
         // TODO add your handling code here:
-        JFileChooser fileChooser = new JFileChooser();
-
-        int returnValue = fileChooser.showOpenDialog(this);
-
-        if (returnValue == JFileChooser.APPROVE_OPTION) {
-            File selectedFile = fileChooser.getSelectedFile();
-
+        if (jFileChooser1.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
+            File selectedFile = jFileChooser1.getSelectedFile();
             filePathField.setText(selectedFile.getAbsolutePath());
-        } 
+            carregarContatosDoArquivo();
+        }
     }//GEN-LAST:event_FileChooserActionPerformed
 
     private void filePathFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_filePathFieldActionPerformed
@@ -331,33 +325,58 @@ public class Visão extends javax.swing.JFrame {
 
     private void BotaoInserirContatoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotaoInserirContatoActionPerformed
       // TODO add your handling code here:
-        String nomeCompleto = textFieldNomeCompleto.getText();
-        String telefone = formattedTextFieldTelefone.getText();
-        String email = textFieldEmail.getText();
-        String logradouro = textFieldLogradouro.getText();
-        int numero = Integer.parseInt(textFieldNumeroEndereco.getText());
-        String complemento = textField_complemento.getText();
-        String cep = textFieldCep.getText();
-        String cidadeestado = textFieldCidadeEstado.getText();
-
-        if (nomeCompleto.isEmpty() || telefone.isEmpty() || email.isEmpty() || logradouro.isEmpty() || complemento.isEmpty() || cidadeestado.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Preencha todos os campos.", "Erro", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
-
-        Contato contatoNovo = new Contato(nomeCompleto, telefone, email, logradouro, numero, complemento, cep, cidadeestado);
-
-        FileManager fileManager = new FileManager(filePathField.getText());
-
-        
         try {
-            fileManager.writeToFile(contatoNovo);
-            JOptionPane.showMessageDialog(this, "Contato adicionado com sucesso.", "Successo", JOptionPane.INFORMATION_MESSAGE);
-            adicionarContatoNaTabela(contatoNovo);
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, "Erro ao salvar.", "Erro", JOptionPane.ERROR_MESSAGE);
+            String nomeCompleto = textFieldNomeCompleto.getText().trim();
+            String telefone = formattedTextFieldTelefone.getText().trim();
+            String email = textFieldEmail.getText().trim();
+            String logradouro = textFieldLogradouro.getText().trim();
+            int numeroEndereco = Integer.parseInt(textFieldNumeroEndereco.getText().trim());
+            String cep = textFieldCep.getText().trim();
+            String cidadeEstado = textFieldCidadeEstado.getText().trim();
+            String complemento = textField_complemento.getText().trim();
+
+            // Validation
+            if (nomeCompleto.isEmpty() || telefone.isEmpty() || email.isEmpty() ||
+                logradouro.isEmpty() || cep.isEmpty() || cidadeEstado.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "All fields except complemento are required.");
+                return;
+            }
+
+            // Add new contact
+            Contato contato = new Contato(nomeCompleto, telefone, email, logradouro, numeroEndereco, cep, cidadeEstado, complemento);
+            FileManager.escreverContatoEmArquivo(filePathField.getText(), contato);
+            carregarContatosDoArquivo();
+        } catch (NumberFormatException ex) {
+            JOptionPane.showMessageDialog(this, "Invalid number format for address number.");
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this, "Error: " + ex.getMessage());
         }
     }//GEN-LAST:event_BotaoInserirContatoActionPerformed
+    
+        private void botaoExcluirContatoActionPerformed(ActionEvent evt) {
+        int selectedRow = tabelaPrincipal.getSelectedRow();
+        if (selectedRow >= 0) {
+            String nomeCompleto = (String) tabelaPrincipal.getValueAt(selectedRow, 0);
+            FileManager.removerContatoDoArquivo(filePathField.getText(), nomeCompleto);
+            carregarContatosDoArquivo();
+        } else {
+            JOptionPane.showMessageDialog(this, "No contact selected to delete.");
+        }
+    }
+        
+    private void carregarContatosDoArquivo() {
+    try {
+        DefaultTableModel model = (DefaultTableModel) tabelaPrincipal.getModel();
+        model.setRowCount(0); // Clear existing data
+
+        List<Contato> contatos = FileManager.lerContatosDoArquivo(filePathField.getText());
+        for (Contato contato : contatos) {
+            model.addRow(new Object[]{contato.getNomeCompleto(), contato.getEmail(), contato.getTelefone(), contato.getLogradouro() + " " + contato.getNumeroEndereco()});
+        }
+    } catch (Exception ex) {
+        JOptionPane.showMessageDialog(this, "Error loading contacts: " + ex.getMessage());
+    }
+}
     
     private void adicionarContatoNaTabela(Contato contato) {
         DefaultTableModel model = (DefaultTableModel) tabelaPrincipal.getModel();
