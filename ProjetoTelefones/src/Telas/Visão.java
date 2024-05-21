@@ -11,6 +11,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.io.File;
 import java.io.IOException;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -334,28 +335,36 @@ public class Visão extends javax.swing.JFrame {
         String telefone = formattedTextFieldTelefone.getText();
         String email = textFieldEmail.getText();
         String logradouro = textFieldLogradouro.getText();
-        int numero =Integer.parseInt(textFieldNumeroEndereco.getText());
+        int numero = Integer.parseInt(textFieldNumeroEndereco.getText());
         String complemento = textField_complemento.getText();
-        int cep = Integer.parseInt(textFieldCep.getText());
+        String cep = textFieldCep.getText();
         String cidadeestado = textFieldCidadeEstado.getText();
-        
-         if (nomeCompleto.isEmpty() || telefone.isEmpty() || email.isEmpty() || logradouro.isEmpty() || complemento.isEmpty() || cidadeestado.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Preencha todos os campos.", "Error", JOptionPane.ERROR_MESSAGE);
+
+        if (nomeCompleto.isEmpty() || telefone.isEmpty() || email.isEmpty() || logradouro.isEmpty() || complemento.isEmpty() || cidadeestado.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Preencha todos os campos.", "Erro", JOptionPane.ERROR_MESSAGE);
             return;
         }
-        
+
         Contato contatoNovo = new Contato(nomeCompleto, telefone, email, logradouro, numero, complemento, cep, cidadeestado);
-        
+
         FileManager fileManager = new FileManager(filePathField.getText());
+
         
         try {
             fileManager.writeToFile(contatoNovo);
             JOptionPane.showMessageDialog(this, "Contato adicionado com sucesso.", "Successo", JOptionPane.INFORMATION_MESSAGE);
+            adicionarContatoNaTabela(contatoNovo);
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Erro ao salvar.", "Erro", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_BotaoInserirContatoActionPerformed
-
+    
+    private void adicionarContatoNaTabela(Contato contato) {
+        DefaultTableModel model = (DefaultTableModel) tabelaPrincipal.getModel();
+        String endereco = contato.getEndereco().toString();
+        model.addRow(new Object[]{contato.getNomeCompleto(), contato.getTelefone(), contato.getEmail(), endereco});
+    }
+    
     /**
      * @param args the command line arguments
      */
