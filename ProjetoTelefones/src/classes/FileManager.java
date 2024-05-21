@@ -37,6 +37,7 @@ public class FileManager {
                     String email = parts[4];
                     contatos.add(new Contato(nomeCompleto, telefone, email));
                 } else {
+                    
                     LOGGER.warning("A linha não possui 5 partes: " + line);
                 }
             }
