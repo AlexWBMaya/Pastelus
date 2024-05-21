@@ -21,6 +21,10 @@ public class Contato {
         classes.Endereco endereco = new classes.Endereco(logradouro, numero, complemento, cep, cidadeestado);
     }
 
+    Contato(String nomeCompleto, String telefone, String email, String logradouro, String numero, String complemento, String cep, String cidadeestado) {
+        
+    }
+
     public String getNomeCompleto() {
         return nomeCompleto;
     }
