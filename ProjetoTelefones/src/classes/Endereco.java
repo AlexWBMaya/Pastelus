@@ -7,10 +7,10 @@ public class Endereco {
     private String logradouro;
     private int numero;
     private String complemento;
-    private int cep;
+    private String cep;
     private String cidadeestado;
 
-    public Endereco(String logradouro, int numero, String complemento, int cep, String cidadeestado) {
+    public Endereco(String logradouro, int numero, String complemento, String cep, String cidadeestado) {
         this.logradouro = logradouro;
         this.numero = numero;
         this.complemento = complemento;
@@ -30,7 +30,7 @@ public class Endereco {
         return complemento;
     }
 
-    public int getCep() {
+    public String getCep() {
         return cep;
     }
 

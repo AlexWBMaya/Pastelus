@@ -10,7 +10,7 @@ public class Contato {
     private Endereco endereco;
 
     // Construtor principal com todos os campos
-    public Contato(String nomeCompleto, String telefone, String email, String logradouro, int numero, String complemento, int cep, String cidadeestado) {
+    public Contato(String nomeCompleto, String telefone, String email, String logradouro, int numero, String complemento, String cep, String cidadeestado) {
         this.nomeCompleto = nomeCompleto;
         this.telefone = telefone;
         this.email = email;
@@ -22,7 +22,7 @@ public class Contato {
         this.nomeCompleto = nomeCompleto;
         this.telefone = telefone;
         this.email = email;
-        this.endereco = new Endereco(logradouro, Integer.parseInt(numero), complemento, Integer.parseInt(cep), cidadeestado);
+        this.endereco = new Endereco(logradouro, Integer.parseInt(numero), complemento, cep, cidadeestado);
     }
 
     // Getters e setters
