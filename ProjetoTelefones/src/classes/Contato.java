@@ -3,6 +3,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package classes;
+import java.lang.String;
 
 /**
  *
@@ -13,10 +14,11 @@ public class Contato {
     private String telefone;
     private String email;
 
-    public Contato(String nomeCompleto, String telefone, String email) {
+    public Contato(String nomeCompleto, String telefone, String email, String logradouro, int numero, String complemento, int cep, String cidadeestado) {
         this.nomeCompleto = nomeCompleto;
         this.telefone = telefone;
         this.email = email;
+        classes.Endereco endereco = new classes.Endereco(logradouro, numero, complemento, cep, cidadeestado);
     }
 
     public String getNomeCompleto() {
