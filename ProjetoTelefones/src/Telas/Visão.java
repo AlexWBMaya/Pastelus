@@ -340,7 +340,7 @@ public class Visão extends javax.swing.JFrame {
         String cidadeestado = textFieldCidadeEstado.getText();
         
          if (nomeCompleto.isEmpty() || telefone.isEmpty() || email.isEmpty() || logradouro.isEmpty() || complemento.isEmpty() || cidadeestado.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Please fill in all fields.", "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Preencha todos os campos.", "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
         
