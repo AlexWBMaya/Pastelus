@@ -60,38 +60,24 @@ public class FileManager {
     }
 
     /**
-     * Removes a contact from the file.
-     * 
-     * @param filePath     the file path.
-     * @param nomeCompleto the full name of the contact to remove.
+     * @param filePath     local do arquivo
+     * @param nomeCompleto O nome Completo do contato a ser removido.
      */
     public static void removerContatoDoArquivo(String filePath, String nomeCompleto) {
-        File inputFile = new File(filePath);
-        File tempFile = new File(inputFile.getAbsolutePath() + ".tmp");
+        List<Contato> contatos = lerContatosDoArquivo(filePath);
+        boolean contatoRemovido = contatos.removeIf(contato -> contato.getNomeCompleto().equalsIgnoreCase(nomeCompleto));
 
-        try (BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(inputFile), StandardCharsets.UTF_8));
-             BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(tempFile), StandardCharsets.UTF_8))) {
-
-            String line;
-            while ((line = br.readLine()) != null) {
-                String[] parts = line.split(";");
-                if (parts.length == 8 && !parts[0].equalsIgnoreCase(nomeCompleto)) {
-                    bw.write(line);
+        if (contatoRemovido) {
+            try (BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(filePath), StandardCharsets.UTF_8))) {
+                for (Contato contato : contatos) {
+                    bw.write(contato.toString());
                     bw.newLine();
                 }
+            } catch (IOException e) {
+                LOGGER.log(Level.SEVERE, "Erro ao atualizar o arquivo: " + filePath, e);
             }
-
-            if (!inputFile.delete()) {
-                LOGGER.log(Level.SEVERE, "Could not delete original file: " + filePath);
-                return;
-            }
-
-            if (!tempFile.renameTo(inputFile)) {
-                LOGGER.log(Level.SEVERE, "Could not rename temp file to original file name: " + filePath);
-            }
-
-        } catch (IOException e) {
-            LOGGER.log(Level.SEVERE, "Erro ao remover contato do arquivo: " + filePath, e);
+        } else {
+            LOGGER.warning("Contato não encontrado: " + nomeCompleto);
         }
     }
 }
