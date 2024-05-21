@@ -1,30 +1,31 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package classes;
-import java.lang.String;
 
 /**
- *
- * @author Alek
+ * Classe Contato para armazenar informações de contato e endereço.
  */
 public class Contato {
     private String nomeCompleto;
     private String telefone;
     private String email;
+    private Endereco endereco;
 
+    // Construtor principal com todos os campos
     public Contato(String nomeCompleto, String telefone, String email, String logradouro, int numero, String complemento, int cep, String cidadeestado) {
         this.nomeCompleto = nomeCompleto;
         this.telefone = telefone;
         this.email = email;
-        classes.Endereco endereco = new classes.Endereco(logradouro, numero, complemento, cep, cidadeestado);
+        this.endereco = new Endereco(logradouro, numero, complemento, cep, cidadeestado);
     }
 
-    Contato(String nomeCompleto, String telefone, String email, String logradouro, String numero, String complemento, String cep, String cidadeestado) {
-        String contatoString = nomeCompleto + telefone + email + logradouro + numero + complemento + cep + cidadeestado;
+    // Sobrecarga do construtor para tratar strings
+    public Contato(String nomeCompleto, String telefone, String email, String logradouro, String numero, String complemento, String cep, String cidadeestado) {
+        this.nomeCompleto = nomeCompleto;
+        this.telefone = telefone;
+        this.email = email;
+        this.endereco = new Endereco(logradouro, Integer.parseInt(numero), complemento, Integer.parseInt(cep), cidadeestado);
     }
 
+    // Getters e setters
     public String getNomeCompleto() {
         return nomeCompleto;
     }
@@ -35,6 +36,10 @@ public class Contato {
 
     public String getEmail() {
         return email;
+    }
+
+    public Endereco getEndereco() {
+        return endereco;
     }
 
     public void setNomeCompleto(String nomeCompleto) {
@@ -49,10 +54,12 @@ public class Contato {
         this.email = email;
     }
 
-    
-    
+    public void setEndereco(Endereco endereco) {
+        this.endereco = endereco;
+    }
+
     @Override
     public String toString() {
-        return nomeCompleto + ";" + telefone.toString() + ";" + email;
+        return nomeCompleto + ";" + telefone + ";" + email + ";" + endereco.toString();
     }
 }
