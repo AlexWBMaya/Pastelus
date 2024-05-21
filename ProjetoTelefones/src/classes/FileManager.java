@@ -29,7 +29,7 @@ public class FileManager implements interfaces.InterfaceICRUD{
                 String[] parts = line.split(";");
                 if (parts.length == 5) {
                     String nomeCompleto = parts[0];
-                    Telefone telefone = new Telefone(parts[1], parts[2], parts[3]);
+                    String telefone = parts[1], parts[2], parts[3];
                     String email = parts[4];
                     contatos.add(new Contato(nomeCompleto, telefone, email));
                 }
