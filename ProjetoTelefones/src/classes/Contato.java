@@ -10,10 +10,10 @@ package classes;
  */
 public class Contato {
     private String nomeCompleto;
-    private Telefone telefone;
+    private String telefone;
     private String email;
 
-    public Contato(String nomeCompleto, Telefone telefone, String email) {
+    public Contato(String nomeCompleto, String telefone, String email) {
         this.nomeCompleto = nomeCompleto;
         this.telefone = telefone;
         this.email = email;
@@ -23,7 +23,7 @@ public class Contato {
         return nomeCompleto;
     }
 
-    public Telefone getTelefone() {
+    public String getTelefone() {
         return telefone;
     }
 
@@ -35,7 +35,7 @@ public class Contato {
         this.nomeCompleto = nomeCompleto;
     }
 
-    public void setTelefone(Telefone telefone) {
+    public void setTelefone(String telefone) {
         this.telefone = telefone;
     }
 

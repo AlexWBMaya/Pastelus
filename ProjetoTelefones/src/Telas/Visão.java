@@ -324,17 +324,14 @@ public class Visão extends javax.swing.JFrame {
     private void BotaoInserirContatoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotaoInserirContatoActionPerformed
         // TODO add your handling code here:
         String nomeCompleto = textFieldNomeCompleto.getText();
-        String ddi = textFieldDDI.getText();
-        String ddd = textFieldDDD.getText();
-        String numero = textFieldTelefone.getText();
+        String telefone = formattedTextFieldTelefone.getText();
         String email = textFieldEmail.getText();
         
-         if (nomeCompleto.isEmpty() || ddi.isEmpty() || ddd.isEmpty() || numero.isEmpty() || email.isEmpty()) {
+         if (nomeCompleto.isEmpty() || telefone.isEmpty() || email.isEmpty()) {
             JOptionPane.showMessageDialog(this, "Please fill in all fields.", "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
         
-        Telefone telefone = new Telefone(ddi, ddd, numero);
         Contato contatoNovo = new Contato(nomeCompleto, telefone, email);
         
         FileManager fileManager = new FileManager(filePathField.getText());
