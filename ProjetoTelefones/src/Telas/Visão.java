@@ -68,6 +68,8 @@ public class Visão extends javax.swing.JFrame {
         textFieldCidadeEstado = new javax.swing.JTextField();
         jLabel9 = new javax.swing.JLabel();
         textFieldConsulta = new javax.swing.JTextField();
+        jLabel10 = new javax.swing.JLabel();
+        textField_complemento = new javax.swing.JTextField();
 
         jCheckBoxMenuItem1.setSelected(true);
         jCheckBoxMenuItem1.setText("jCheckBoxMenuItem1");
@@ -177,6 +179,8 @@ public class Visão extends javax.swing.JFrame {
 
         textFieldConsulta.setText("jTextField5");
 
+        jLabel10.setText("complemento");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -218,24 +222,25 @@ public class Visão extends javax.swing.JFrame {
                                 .addComponent(jLabel8)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(textFieldCep, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(0, 0, Short.MAX_VALUE))
+                                .addGap(0, 56, Short.MAX_VALUE))
                             .addComponent(textFieldCidadeEstado)
                             .addComponent(textFieldLogradouro))))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(207, 207, 207)
+                        .addComponent(jLabel10)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(textField_complemento, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(filePathField)
                             .addComponent(textFieldConsulta, javax.swing.GroupLayout.DEFAULT_SIZE, 152, Short.MAX_VALUE)))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addComponent(FileChooser, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addContainerGap())
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addComponent(jButton2)
-                                .addGap(33, 33, 33))))))
+                        .addComponent(FileChooser, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap())
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(jButton2)
+                        .addGap(33, 33, 33))))
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 840, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -260,7 +265,9 @@ public class Visão extends javax.swing.JFrame {
                     .addComponent(textFieldNomeCompleto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(filePathField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel4)
-                    .addComponent(textFieldLogradouro))
+                    .addComponent(textFieldLogradouro)
+                    .addComponent(jLabel10)
+                    .addComponent(textField_complemento, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
@@ -292,9 +299,9 @@ public class Visão extends javax.swing.JFrame {
                         .addGap(18, 18, 18)
                         .addComponent(botaoAlterar, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(183, 183, 183)
-                        .addComponent(botaoPDF)
-                        .addContainerGap())
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 350, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(botaoPDF))
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 350, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap())
         );
 
         pack();
@@ -322,17 +329,22 @@ public class Visão extends javax.swing.JFrame {
     }//GEN-LAST:event_filePathFieldComponentHidden
 
     private void BotaoInserirContatoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotaoInserirContatoActionPerformed
-        // TODO add your handling code here:
+      // TODO add your handling code here:
         String nomeCompleto = textFieldNomeCompleto.getText();
         String telefone = formattedTextFieldTelefone.getText();
         String email = textFieldEmail.getText();
+        String logradouro = textFieldLogradouro.getText();
+        int numero =Integer.parseInt(textFieldNumeroEndereco.getText());
+        String complemento = textField_complemento.getText();
+        int cep = Integer.parseInt(textFieldCep.getText());
+        String cidadeestado = textFieldCidadeEstado.getText();
         
-         if (nomeCompleto.isEmpty() || telefone.isEmpty() || email.isEmpty()) {
+         if (nomeCompleto.isEmpty() || telefone.isEmpty() || email.isEmpty() || logradouro.isEmpty() || complemento.isEmpty() || cidadeestado.isEmpty()) {
             JOptionPane.showMessageDialog(this, "Please fill in all fields.", "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
         
-        Contato contatoNovo = new Contato(nomeCompleto, telefone, email);
+        Contato contatoNovo = new Contato(nomeCompleto, telefone, email, logradouro, numero, complemento, cep, cidadeestado);
         
         FileManager fileManager = new FileManager(filePathField.getText());
         
@@ -393,6 +405,7 @@ public class Visão extends javax.swing.JFrame {
     private javax.swing.JCheckBoxMenuItem jCheckBoxMenuItem1;
     private javax.swing.JFileChooser jFileChooser1;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -413,6 +426,7 @@ public class Visão extends javax.swing.JFrame {
     private javax.swing.JTextField textFieldLogradouro;
     private javax.swing.JTextField textFieldNomeCompleto;
     private javax.swing.JTextField textFieldNumeroEndereco;
+    private javax.swing.JTextField textField_complemento;
     // End of variables declaration//GEN-END:variables
 
     private String toString(java.util.List<Contato> readFromFile) {
