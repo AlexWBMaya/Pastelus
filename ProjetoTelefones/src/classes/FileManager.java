@@ -16,10 +16,13 @@ public class FileManager {
     /**
      * Reads contacts from a file.
      * 
+     * @param filePath the path of the file to read from.
      * @return a list of Contato objects read from the file.
      */
     public static List<Contato> lerContatosDoArquivo(String filePath) {
         List<Contato> contatos = new ArrayList<>();
+        if (!validateFilePath(filePath)) return contatos;
+
         try (BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(filePath), StandardCharsets.UTF_8))) {
             String line;
             while ((line = br.readLine()) != null) {
@@ -51,6 +54,8 @@ public class FileManager {
      * @param contato  the Contato object to write to the file.
      */
     public static void escreverContatoEmArquivo(String filePath, Contato contato) {
+        if (!validateFilePath(filePath)) return;
+
         try (BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(filePath, true), StandardCharsets.UTF_8))) {
             bw.write(contato.toString());
             bw.newLine();
@@ -60,8 +65,10 @@ public class FileManager {
     }
 
     /**
-     * @param filePath     local do arquivo
-     * @param nomeCompleto O nome Completo do contato a ser removido.
+     * Removes a contact from a file by name.
+     * 
+     * @param filePath     the file path.
+     * @param nomeCompleto the full name of the contact to be removed.
      */
     public static void removerContatoDoArquivo(String filePath, String nomeCompleto) {
         List<Contato> contatos = lerContatosDoArquivo(filePath);
@@ -79,5 +86,19 @@ public class FileManager {
         } else {
             LOGGER.warning("Contato não encontrado: " + nomeCompleto);
         }
+    }
+
+    /**
+     * Validates the file path.
+     * 
+     * @param filePath the file path to validate.
+     * @return true if the file path is valid, false otherwise.
+     */
+    private static boolean validateFilePath(String filePath) {
+        if (filePath == null || filePath.isEmpty()) {
+            LOGGER.warning("File path is invalid.");
+            return false;
+        }
+        return true;
     }
 }
