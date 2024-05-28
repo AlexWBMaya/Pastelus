@@ -232,6 +232,11 @@ public class Visão extends javax.swing.JFrame {
         botaoAlterar.setText("Alterar");
 
         botaoPDF.setText("PDF");
+        botaoPDF.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                botaoPDFActionPerformed(evt);
+            }
+        });
 
         jLabel3.setText("Endereço");
 
@@ -497,6 +502,10 @@ public class Visão extends javax.swing.JFrame {
     private void textFieldNomeCompletoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_textFieldNomeCompletoActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_textFieldNomeCompletoActionPerformed
+
+    private void botaoPDFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botaoPDFActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_botaoPDFActionPerformed
         
     private void carregarContatosDoArquivo() {
         try {
