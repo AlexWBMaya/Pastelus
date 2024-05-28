@@ -48,7 +48,7 @@ public class Visão extends javax.swing.JFrame {
         getContentPane().add(suggestionScrollPane);
 
         // Set layout and bounds for the suggestion scroll pane
-        suggestionScrollPane.setBounds(805, 155, 200, 100);
+        suggestionScrollPane.setBounds(805, 170, 200, 100);
 
         textFieldConsulta.getDocument().addDocumentListener(new DocumentListener() {
             @Override
@@ -146,6 +146,7 @@ public class Visão extends javax.swing.JFrame {
         jScrollPane1.setViewportView(jTable2);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setResizable(false);
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -299,13 +300,12 @@ public class Visão extends javax.swing.JFrame {
                                         .addComponent(jLabel8)))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(textFieldCep, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(0, 0, Short.MAX_VALUE))
+                                    .addComponent(textFieldCep, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addGroup(layout.createSequentialGroup()
                                         .addComponent(jLabel10)
                                         .addGap(18, 18, 18)
-                                        .addComponent(textField_complemento, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE)))))))
+                                        .addComponent(textField_complemento, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addGap(0, 0, Short.MAX_VALUE)))))
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addGap(111, 111, 111)
@@ -419,7 +419,8 @@ public class Visão extends javax.swing.JFrame {
                 contato.getEmail(),
                 contato.getTelefone(),
                 contato.getEndereco().getLogradouro() + " " + contato.getEndereco().getNumero(),
-                contato.getEndereco().getCep() + " " + contato.getEndereco().getCidadeestado()
+                contato.getEndereco().getCep() + " " + contato.getEndereco().getCidadeestado() + " " + 
+                        contato.getEndereco().getComplemento()
             });
         }
     } 
@@ -527,7 +528,8 @@ public class Visão extends javax.swing.JFrame {
                     contato.getEmail(),
                     contato.getTelefone(),
                     contato.getEndereco().getLogradouro() + " " + contato.getEndereco().getNumero(),
-                    contato.getEndereco().getCep() + " " + contato.getEndereco().getCidadeestado()
+                    contato.getEndereco().getCep() + " " + contato.getEndereco().getCidadeestado() + " " + 
+                            contato.getEndereco().getComplemento()
                 });
             }
         } catch (Exception ex) {
