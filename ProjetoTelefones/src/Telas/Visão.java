@@ -11,7 +11,13 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.io.File;
 import java.io.IOException;
+import java.util.stream.Collectors;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  *
@@ -24,9 +30,59 @@ public class Visão extends javax.swing.JFrame {
      */
     public Visão() {
         initComponents();
+        initCustomComponents();
         filePathField.setEnabled(false);
         carregarContatosDoArquivo(); // Carregar contatos ao iniciar
     }
+    
+    private JList<String> suggestionList;
+    private JScrollPane suggestionScrollPane;
+    
+     private void initCustomComponents() {
+        // Initialize the suggestion list and scroll pane
+        suggestionList = new JList<>();
+        suggestionScrollPane = new JScrollPane(suggestionList);
+        suggestionScrollPane.setVisible(false); // Start with the suggestion pane hidden
+
+        // Add the suggestion scroll pane to the main frame
+        getContentPane().add(suggestionScrollPane);
+
+        // Set layout and bounds for the suggestion scroll pane
+        suggestionScrollPane.setBounds(650, 100, 200, 100);
+
+        textFieldConsulta.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                updateSuggestions();
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                updateSuggestions();
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                updateSuggestions();
+            }
+        });
+
+        suggestionList.addListSelectionListener(e -> {
+            if (!e.getValueIsAdjusting()) {
+                textFieldConsulta.setText(suggestionList.getSelectedValue());
+                suggestionScrollPane.setVisible(false);
+            }
+        });
+        if (textFieldConsulta.isShowing()) {
+        // Adjust the suggestion scroll pane position
+        Point location = textFieldConsulta.getLocationOnScreen();
+        SwingUtilities.convertPointFromScreen(location, getContentPane());
+        suggestionScrollPane.setBounds(location.x, location.y + textFieldConsulta.getHeight(),
+                                       textFieldConsulta.getWidth(), 100);
+        suggestionScrollPane.setVisible(true);
+    }
+    }
+
     
     /**
      * This method is called from within the constructor to initialize the form.
@@ -57,7 +113,7 @@ public class Visão extends javax.swing.JFrame {
         tabelaPrincipal = new javax.swing.JTable();
         formattedTextFieldTelefone = new javax.swing.JFormattedTextField();
         botaoExcluirContato = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
+        jButton_Consultar = new javax.swing.JButton();
         botaoAlterar = new javax.swing.JButton();
         botaoPDF = new javax.swing.JButton();
         jLabel3 = new javax.swing.JLabel();
@@ -124,6 +180,11 @@ public class Visão extends javax.swing.JFrame {
         });
 
         textFieldNomeCompleto.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        textFieldNomeCompleto.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                textFieldNomeCompletoActionPerformed(evt);
+            }
+        });
 
         jLabel2.setText("Nome Completo");
 
@@ -161,7 +222,12 @@ public class Visão extends javax.swing.JFrame {
             }
         });
 
-        jButton2.setText("Consultar");
+        jButton_Consultar.setText("Consultar");
+        jButton_Consultar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton_ConsultarActionPerformed(evt);
+            }
+        });
 
         botaoAlterar.setText("Alterar");
 
@@ -180,8 +246,6 @@ public class Visão extends javax.swing.JFrame {
         textFieldCidadeEstado.setHorizontalAlignment(javax.swing.JTextField.CENTER);
 
         jLabel9.setText("Cidade/Estado");
-
-        textFieldConsulta.setText("jTextField5");
 
         jLabel10.setText("complemento");
 
@@ -243,11 +307,12 @@ public class Visão extends javax.swing.JFrame {
                         .addComponent(FileChooser, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addContainerGap())
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(jButton2)
+                        .addComponent(jButton_Consultar)
                         .addGap(33, 33, 33))))
             .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 840, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(botaoPDF, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(botaoAlterar, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -286,7 +351,7 @@ public class Visão extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jLabel5))
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jButton2)
+                        .addComponent(jButton_Consultar)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(textFieldConsulta, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -311,6 +376,40 @@ public class Visão extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void updateSuggestions() {
+        String searchText = textFieldConsulta.getText().trim();
+        if (searchText.isEmpty()) {
+            suggestionScrollPane.setVisible(false);
+            return;
+        }
+
+        List<Contato> contatos = FileManager.lerContatosDoArquivo(filePathField.getText());
+        List<String> matchedContacts = contatos.stream()
+                .map(Contato::getNomeCompleto)
+                .filter(nome -> nome.toLowerCase().contains(searchText.toLowerCase()))
+                .collect(Collectors.toList());
+
+        if (matchedContacts.isEmpty()) {
+            suggestionScrollPane.setVisible(false);
+        } else {
+            suggestionList.setListData(matchedContacts.toArray(new String[0]));
+            suggestionScrollPane.setVisible(true);
+        }
+    }
+     
+    private void updateTable(List<Contato> contatos) {
+        DefaultTableModel model = (DefaultTableModel) tabelaPrincipal.getModel();
+        model.setRowCount(0); // Limpar linhas existentes
+
+        for (Contato contato : contatos) {
+            model.addRow(new Object[]{
+                contato.getNomeCompleto(),
+                contato.getEmail(),
+                contato.getTelefone(),
+                contato.getEndereco().toString()
+            });
+        }
+    } 
     private void FileChooserActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_FileChooserActionPerformed
         // TODO add your handling code here:
         if (jFileChooser1.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
@@ -369,6 +468,35 @@ public class Visão extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "No contact selected to delete.");
         }
     }//GEN-LAST:event_botaoExcluirContatoActionPerformed
+
+    private void jButton_ConsultarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_ConsultarActionPerformed
+        // TODO add your handling code here:
+        String searchText = textFieldConsulta.getText().trim();
+    List<Contato> contatos = FileManager.lerContatosDoArquivo(filePathField.getText());
+
+    if (searchText.isEmpty()) {
+        // If search text is empty, display all contacts
+        updateTable(contatos);
+    } else {
+        // Filter contacts based on search text
+        List<Contato> matchedContacts = contatos.stream()
+                .filter(contato -> contato.getNomeCompleto().toLowerCase().contains(searchText.toLowerCase()))
+                .collect(Collectors.toList());
+
+        if (matchedContacts.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "No contacts found with the given name.", "Info", JOptionPane.INFORMATION_MESSAGE);
+        }
+        updateTable(matchedContacts);
+    }
+
+
+
+   
+    }//GEN-LAST:event_jButton_ConsultarActionPerformed
+  
+    private void textFieldNomeCompletoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_textFieldNomeCompletoActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_textFieldNomeCompletoActionPerformed
         
     private void carregarContatosDoArquivo() {
         try {
@@ -429,6 +557,7 @@ public class Visão extends javax.swing.JFrame {
             }
         });
     }
+    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton BotaoInserirContato;
@@ -440,7 +569,7 @@ public class Visão extends javax.swing.JFrame {
     private javax.swing.ButtonGroup buttonGroup2;
     private javax.swing.JTextField filePathField;
     private javax.swing.JFormattedTextField formattedTextFieldTelefone;
-    private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButton_Consultar;
     private javax.swing.JCheckBoxMenuItem jCheckBoxMenuItem1;
     private javax.swing.JFileChooser jFileChooser1;
     private javax.swing.JLabel jLabel1;
